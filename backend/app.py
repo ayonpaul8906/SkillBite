@@ -23,13 +23,15 @@ db = firestore.client()
 
 
 ##<-----Main route------>
+
 @app.route("/", methods = ["GET"])
 def home():
     return jsonify({"message":"SkillBite is running"})
 
 
 
-##<-----/recommend → POST user inputs → Gemini call → structured list of resources------>
+##<-----/recommend → POST user inputs → call groq → structured list of resources------>
+
 @app.route("/recommend", methods=["POST"])
 def recommend():
     data = request.get_json()
@@ -46,7 +48,7 @@ def recommend():
         import json
         recommendations = json.loads(recommendations_raw)
     except Exception as e:
-        return jsonify({"error": "Failed to parse Gemini response", "raw": recommendations_raw, "exception": str(e)}), 500
+        return jsonify({"error": "Failed to parse Groq response", "raw": recommendations_raw, "exception": str(e)}), 500
 
     try:
         user_ref = db.collection("users").document(user_id)
@@ -66,6 +68,7 @@ def recommend():
 
 
 ##<--------/progress → GET user_id → fetch Firestore recommendations------>
+
 @app.route('/progress', methods=['GET'])
 def get_progress():
     user_id = request.args.get('user_id')
@@ -87,6 +90,7 @@ def get_progress():
 
 
 ##<--------/progress/update → POST user_id, resource_index, completed → update Firestore------>
+
 @app.route('/progress/update', methods=['POST'])
 def update_progress():
     data = request.get_json()

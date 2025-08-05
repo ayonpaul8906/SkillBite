@@ -34,43 +34,75 @@ def validate_links(resources):
 
 
 def generate_learning_resources(user_skills, user_goal):
-    # First, get recommendations from LLM without YouTube links
+
     prompt = f"""
-You are an AI career coach helping users upskill quickly.
+        You are an AI career coach helping users upskill quickly.
 
-The user has the following skills: {user_skills}
-Their career goal is: {user_goal}
+        The user has the following input:
+        - Skills: {user_skills}
+        - Career goal: {user_goal}
 
-1. Start with a **brief career summary**: Explain what the role involves, the industries it fits in, and typical responsibilities.
-2. Then give **future scope**: Mention demand trends, salary expectations, and why this role is promising.
-3. Estimate a **probability (in %)** of landing a job in this career goal within 6 months if the user completes the recommended learning resources (based on current market trends).
+        First, **validate the input**. If any of the following conditions are met:
+        - The user_skills or user_goal is nonsensical, made-up, gibberish (e.g., "asdfg", "banana dancing", "zzxcv"), too vague, or unrelated to real-world careers or skills
+        - The career goal is not identifiable as a real profession or learning path
 
-Then recommend **5 to 7 high-quality, bite-sized learning resources** (tutorials, articles, or videos). Prioritize:
-- **5 YouTube videos** around the topic and enhancements of skills for the career goal
-- **2-3 articles** from verified sources:
-    - https://developer.mozilla.org
-    - https://www.freecodecamp.org
-    - https://www.w3schools.com
-    - https://realpython.com
-    - https://geeksforgeeks.org
+        Then respond with the following JSON format:
+        {{
+        "error": "Invalid input",
+        "message": "Please enter valid, real-world skills and a clear career goal."
+        }}
 
-For each resource, include:
-- title
-- brief summary (2-3 lines)
-- link (for articles only, leave empty for YouTube videos)
-- duration (in minutes)
-- topic
-- recommended next step after this resource
-- type (either "youtube" or "article")
+        ---
 
-Format the output as a **JSON object** with:
-{{
-  "career_summary": "...",
-  "future_scope": "...",
-  "job_success_probability": "...",
-  "resources": [ ... list of 7-10 resources ... ]
-}}
-"""
+        If the input is valid, continue with the following:
+
+        1. Provide a **brief career summary**: Describe what the role involves, the industries it fits in, and typical responsibilities.
+        2. Explain the **future scope**: Mention demand trends, salary expectations, and why this role is promising.
+        3. Estimate a **probability (in %)** of landing a job in this career goal within 6 months if the user completes the recommended learning resources (based on current market trends).
+
+        Then recommend **7-10 high-quality, bite-sized learning resources**:
+        - **5 YouTube videos** related to the role, covering required skills or concepts
+        - **2-3 articles** from verified sources like:
+            - https://developer.mozilla.org
+            - https://www.freecodecamp.org
+            - https://www.w3schools.com
+            - https://realpython.com
+            - https://geeksforgeeks.org
+            -u can use others too, make 100% sure that they are valid pages
+
+        For each resource, include:
+        - title
+        - brief summary (2-3 lines)
+        - link (leave empty for YouTube videos)
+        - duration (in minutes)
+        - topic
+        - recommended next step after this resource
+        - type (either "youtube" or "article")
+
+                Base the job success probability (%) on:
+                - Relevance and demand of the career goal in the current job market
+                - User's current skill level and how well it aligns with the goal
+                - Availability and quality of upskilling resources
+                - Typical hiring requirements for the role
+                - Regional/global market conditions (use common sense; don’t invent data)
+
+                Use the following scale as a guide:
+                - 90–100% → High demand, matching skills, great resources, accessible roles
+                - 70–89% → Good demand, partial skills match, decent resources
+                - 50–69% → Moderate demand, needs significant skill-building
+                - 30–49% → Low demand or requires long-term commitment
+                - <30% → Unclear path, rare job, or major skill gaps
+
+                Output only a number followed by `%`, like `"job_success_probability": "65%"`
+
+        Format the output as a **JSON object** like this:
+        {{
+        "career_summary": "...",
+        "future_scope": "...",
+        "job_success_probability": "...",
+        "resources": [ ... list of 7-10 resources ... ]
+        }}
+        """
 
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",

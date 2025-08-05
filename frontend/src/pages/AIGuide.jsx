@@ -17,6 +17,7 @@ import {
   Briefcase, // Icon for Future Scope
   TrendingUp, // Icon for Job Probability
 } from "lucide-react";
+import { signOut } from 'firebase/auth';
 import { Button } from "../components/ui/button";
 import { useAuth } from "../hooks/useAuth";
 
