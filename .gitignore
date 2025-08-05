@@ -40,6 +40,7 @@ backend/.cache/
 backend/*.sqlite3
 backend/*.db
 backend/instance/
+backend/dbskillbite.json
 
 # Editor & OS-specific files
 .vscode/
