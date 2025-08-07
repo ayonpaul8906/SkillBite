@@ -47,11 +47,28 @@ def recommend():
     try:
         import json
         recommendations = json.loads(recommendations_raw)
+        if "error" in recommendations:
+            return jsonify(recommendations), 500
     except Exception as e:
         return jsonify({"error": "Failed to parse Groq response", "raw": recommendations_raw, "exception": str(e)}), 500
 
     try:
+        # user_ref = db.collection("users").document(user_id)
         user_ref = db.collection("users").document(user_id)
+        resource_ids_ref = user_ref.collection("resource_ids")
+
+        for resource in recommendations.get("resources", []):
+            # Generate a unique ID for the resource (e.g., hash of title+goal)
+            import hashlib
+            resource_id = hashlib.md5((resource["title"] + goal).encode()).hexdigest()
+            resource_data = {
+                "resource_data": resource,
+                "goal": goal,
+                "completed": resource.get("completed", False),
+                "timestamp": firestore.SERVER_TIMESTAMP,
+            }
+            resource_ids_ref.document(resource_id).set(resource_data, merge=True)
+
         user_ref.set({
             "skills": skills,
             "goal": goal,
@@ -129,8 +146,6 @@ def update_progress():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
 
 
 if __name__ == "__main__":
