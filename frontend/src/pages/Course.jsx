@@ -82,40 +82,47 @@ const CourseViewer = () => {
     const [videoProgress, setVideoProgress] = useState({});
 
     // YouTube API integration for video progress tracking
-    useEffect(() => {
-        // Load YouTube IFrame API
-        if (!window.YT) {
-            const tag = document.createElement('script');
-            tag.src = 'https://www.youtube.com/iframe_api';
-            const firstScriptTag = document.getElementsByTagName('script')[0];
-            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+// Modify the YouTube API initialization section
+
+// ...existing code...
+
+useEffect(() => {
+    // Load YouTube IFrame API
+    if (!window.YT) {
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    // Initialize YouTube player when API is ready
+    window.onYouTubeIframeAPIReady = () => {
+        // Check if we have courses and valid current course
+        const currentCourse = courses[currentCourseIndex];
+        if (currentCourse && isYouTubeLink(currentCourse.link)) {
+            initializeYouTubePlayer();
         }
+    };
 
-        // Initialize YouTube player when API is ready
-        window.onYouTubeIframeAPIReady = () => {
-            if (currentCourse && isYouTubeLink(currentCourse.link)) {
-                initializeYouTubePlayer();
-            }
-        };
+    // If API is already loaded
+    if (window.YT && window.YT.Player) {
+        const currentCourse = courses[currentCourseIndex];
+        if (currentCourse && isYouTubeLink(currentCourse.link)) {
+            initializeYouTubePlayer();
+        }
+    }
 
-        // If API is already loaded
-        if (window.YT && window.YT.Player) {
-            if (currentCourse && isYouTubeLink(currentCourse.link)) {
-                initializeYouTubePlayer();
+    return () => {
+        // Cleanup
+        if (window.youtubePlayer) {
+            try {
+                window.youtubePlayer.destroy();
+            } catch (e) {
+                console.log('Error destroying YouTube player:', e);
             }
         }
-
-        return () => {
-            // Cleanup
-            if (window.youtubePlayer) {
-                try {
-                    window.youtubePlayer.destroy();
-                } catch (e) {
-                    console.log('Error destroying YouTube player:', e);
-                }
-            }
-        };
-    }, [currentCourseIndex, courses]);
+    };
+}, [currentCourseIndex, courses]);
 
     const initializeYouTubePlayer = () => {
         if (!currentCourse || !window.YT || !window.YT.Player) return;

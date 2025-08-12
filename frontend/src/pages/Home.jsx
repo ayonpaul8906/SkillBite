@@ -97,7 +97,7 @@ const HomePage = () => {
             whileHover="hover"
             whileTap="tap"
           >
-            <Link to="/register" > Sign Up</Link>
+            <Link to="/register" > Register</Link>
             
           </motion.a>
         </div>

@@ -43,7 +43,7 @@ export default function Login() {
         transition={{ duration: 0.5 }}
         className="bg-white/10 backdrop-blur-lg p-8 rounded-3xl shadow-lg w-full max-w-md text-white"
       >
-        <h2 className="text-3xl font-bold mb-6 text-center">Sign In</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center">Login</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="text-sm">Email</label>
@@ -75,14 +75,14 @@ export default function Login() {
             type="submit"
             className="w-full bg-white text-purple-700 font-semibold py-2 rounded-lg hover:bg-purple-100 transition"
           >
-            Sign In
+            Login
           </button>
           <button
             type="button"
             onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-2 border border-white/30 mt-2 py-2 rounded-lg hover:bg-white/10"
           >
-            <FcGoogle className="text-xl" /> Sign in with Google
+            <FcGoogle className="text-xl" /> Login with Google
           </button>
           <p className="text-sm mt-4 text-center">
             Don’t have an account?{" "}
