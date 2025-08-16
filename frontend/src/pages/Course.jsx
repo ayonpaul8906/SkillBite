@@ -81,11 +81,6 @@ const CourseViewer = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [videoProgress, setVideoProgress] = useState({});
 
-    // YouTube API integration for video progress tracking
-// Modify the YouTube API initialization section
-
-// ...existing code...
-
 useEffect(() => {
     // Load YouTube IFrame API
     if (!window.YT) {
@@ -474,28 +469,28 @@ useEffect(() => {
                   className="fixed inset-0 bg-white/95 backdrop-blur-lg z-40 flex flex-col items-center justify-center space-y-8 sm:hidden"
                 >
                   <a
-                    href="#home"
+                    href="/dashboard"
                     className="text-3xl text-gray-800 hover:text-indigo-600 font-bold"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Home
                   </a>
                   <a
-                    href="#features"
+                    href="/about"
                     className="text-3xl text-gray-800 hover:text-indigo-600 font-bold"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     About
                   </a>
                   <a
-                    href="#how-it-works"
+                    href="/guide"
                     className="text-3xl text-gray-800 hover:text-indigo-600 font-bold"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     AI Guide
                   </a>
                   <a
-                    href="#contact"
+                    href="/courses"
                     className="text-3xl text-gray-800 hover:text-indigo-600 font-bold"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >

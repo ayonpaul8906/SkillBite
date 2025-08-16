@@ -29,6 +29,12 @@ const Dashboard = () => {
   const [firestoreLoading, setFirestoreLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const [selectedCareer, setSelectedCareer] = useState(null); // State for modal content
+  const [courses, setCourses] = useState([]);
+  const [userProgress, setUserProgress] = useState({
+    totalBites: 0,
+    completedBites: 0,
+    progressPercentage: 0
+  });
 
   // If auth is loading or no user, redirect
   useEffect(() => {
@@ -38,19 +44,28 @@ const Dashboard = () => {
   }, [user, authLoading, navigate]);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-
     const fetchUserData = async () => {
       if (user) {
         try {
           const userRef = doc(db, 'users', user.uid);
           const userSnap = await getDoc(userRef);
           if (userSnap.exists()) {
-            setUserData(userSnap.data());
-          } else {
-            console.log('No user data found in Firestore!');
-            // Optional: Create a new user profile document if it doesn't exist
-            // await setDoc(doc(db, "users", user.uid), { ...initialData });
+            const data = userSnap.data();
+            setUserData(data);
+
+            // Get courses and calculate progress
+            const resources = data.recommendations?.resources || [];
+            setCourses(resources);
+
+            const totalBites = resources.length;
+            const completedBites = resources.filter(resource => resource.completed).length;
+            const progressPercentage = totalBites > 0 ? (completedBites / totalBites) * 100 : 0;
+
+            setUserProgress({
+              totalBites,
+              completedBites,
+              progressPercentage
+            });
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -122,13 +137,6 @@ const Dashboard = () => {
       </div>
     );
   }
-
-  // Mock data for progress and recommended careers
-  const userProgress = {
-    totalBites: 20,
-    completedBites: 12,
-    progressPercentage: (12 / 20) * 100,
-  };
 
   const recommendedCareers = [
     {
@@ -289,28 +297,28 @@ const Dashboard = () => {
           className="fixed inset-0 bg-white/95 backdrop-blur-lg z-40 flex flex-col items-center justify-center space-y-8 sm:hidden"
         >
           <a
-            href="#home"
+            href="/dashboard"
             className="text-3xl text-gray-800 hover:text-indigo-600 font-bold"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Home
           </a>
           <a
-            href="#features"
+            href="/about"
             className="text-3xl text-gray-800 hover:text-indigo-600 font-bold"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             About
           </a>
           <a
-            href="#how-it-works"
+            href="/guide"
             className="text-3xl text-gray-800 hover:text-indigo-600 font-bold"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             AI Guide
           </a>
           <a
-            href="#contact"
+            href="/courses"
             className="text-3xl text-gray-800 hover:text-indigo-600 font-bold"
             onClick={() => setIsMobileMenuOpen(false)}
           >
@@ -383,7 +391,7 @@ const Dashboard = () => {
                 </div>
                 <p className="mt-2 text-sm opacity-80">
                   {userProgress.completedBites} of {userProgress.totalBites}
-                  bites completed
+                   courses completed
                 </p>
               </div>
               <div className="flex-shrink-0">
