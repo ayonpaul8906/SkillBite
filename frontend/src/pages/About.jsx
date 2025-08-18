@@ -90,35 +90,9 @@ const About = ({ handleNavigate }) => {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-indigo-50 to-blue-50 font-inter text-slate-800 relative overflow-x-hidden">
       {/* Navbar */}
       <header className="flex items-center justify-between px-6 md:px-12 py-4 bg-white shadow-md border-b border-slate-200 sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <svg
-            width="40"
-            height="40"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-indigo-600"
-          >
-            <path
-              d="M12 2L2 7V17L12 22L22 17V7L12 2Z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M12 12L2 7M12 12L22 7M12 12V22"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M7 9L12 12L17 9"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <h1 className="text-2xl font-bold text-indigo-700">SkillBite</h1>
+       <div className="flex items-center gap-2">
+          <img src="/logo.gif" alt="" className='h-15 w-15'/>
+          <span className="text-3xl font-bold text-indigo-700">SkillBite</span>
         </div>
 
         <nav className="hidden sm:flex gap-6 text-indigo-700 font-medium">

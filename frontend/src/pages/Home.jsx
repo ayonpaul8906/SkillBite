@@ -59,13 +59,7 @@ const HomePage = () => {
         }`}
       >
         <div className="flex items-center gap-3">
-          {/* Using an inline SVG for the logo for better control and no external image dependency */}
-          {/* <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-indigo-600">
-            <path d="M12 2L2 7V17L12 22L22 17V7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-            <path d="M12 12L2 7M12 12L22 7M12 12V22" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-            <path d="M7 9L12 12L17 9" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-          </svg> */}
-          <img src="/logo.png" alt="" className='h-20 w-20'/>
+          <img src="/logo.gif" alt="" className='h-15 w-15'/>
           <span className="text-3xl font-bold text-indigo-700">SkillBite</span>
         </div>
 
