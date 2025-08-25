@@ -62,7 +62,7 @@ const AIGuide = () => {
   // API call function with structured response
   const getGeminiRecommendations = async (userPrompt) => {
     // Here we make the API call to your Flask backend
-    const apiUrl = "http://127.0.0.1:8000/recommend";
+    const apiUrl = `${import.meta.env.VITE_BACKEND_URL}/recommend`;
 
     const payload = {
       userId: user.uid,

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   BrainCircuit,
   GraduationCap,
@@ -14,12 +14,12 @@ import {
   Menu,
   X,
   Zap,
-} from 'lucide-react';
-import { Button } from '../components/ui/button';
-import { signOut } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
-import { db, auth } from '../lib/firebase';
-import { useAuth } from '../hooks/useAuth.jsx';
+} from "lucide-react";
+import { Button } from "../components/ui/button";
+import { signOut } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { db, auth } from "../lib/firebase";
+import { useAuth } from "../hooks/useAuth.jsx";
 
 const Dashboard = () => {
   const { user, loading: authLoading } = useAuth();
@@ -33,13 +33,13 @@ const Dashboard = () => {
   const [userProgress, setUserProgress] = useState({
     totalBites: 0,
     completedBites: 0,
-    progressPercentage: 0
+    progressPercentage: 0,
   });
 
   // If auth is loading or no user, redirect
   useEffect(() => {
     if (!authLoading && !user) {
-      navigate('/');
+      navigate("/");
     }
   }, [user, authLoading, navigate]);
 
@@ -47,7 +47,7 @@ const Dashboard = () => {
     const fetchUserData = async () => {
       if (user) {
         try {
-          const userRef = doc(db, 'users', user.uid);
+          const userRef = doc(db, "users", user.uid);
           const userSnap = await getDoc(userRef);
           if (userSnap.exists()) {
             const data = userSnap.data();
@@ -58,17 +58,20 @@ const Dashboard = () => {
             setCourses(resources);
 
             const totalBites = resources.length;
-            const completedBites = resources.filter(resource => resource.completed).length;
-            const progressPercentage = totalBites > 0 ? (completedBites / totalBites) * 100 : 0;
+            const completedBites = resources.filter(
+              (resource) => resource.completed
+            ).length;
+            const progressPercentage =
+              totalBites > 0 ? (completedBites / totalBites) * 100 : 0;
 
             setUserProgress({
               totalBites,
               completedBites,
-              progressPercentage
+              progressPercentage,
             });
           }
         } catch (error) {
-          console.error('Error fetching user data:', error);
+          console.error("Error fetching user data:", error);
         } finally {
           setFirestoreLoading(false);
         }
@@ -83,13 +86,13 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      console.error('Error logging out:', error);
+      console.error("Error logging out:", error);
     }
   };
 
-  const displayName = userData?.fullName || user?.displayName || 'Explorer';
+  const displayName = userData?.fullName || user?.displayName || "Explorer";
   const avatar =
     user?.photoURL ||
     `https://placehold.co/100x100/A78BFA/ffffff?text=${displayName
@@ -101,9 +104,9 @@ const Dashboard = () => {
     animate: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
+      transition: { duration: 0.6, ease: "easeOut" },
     },
-    hover: { scale: 1.03, boxShadow: '0px 15px 30px rgba(0, 0, 0, 0.1)' },
+    hover: { scale: 1.03, boxShadow: "0px 15px 30px rgba(0, 0, 0, 0.1)" },
   };
 
   const sectionVariants = {
@@ -111,7 +114,7 @@ const Dashboard = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: 'easeOut' },
+      transition: { duration: 0.8, ease: "easeOut" },
     },
   };
 
@@ -131,7 +134,7 @@ const Dashboard = () => {
       <div className="flex justify-center items-center h-screen bg-gray-100">
         <motion.div
           animate={{ rotate: 360 }}
-          transition={{ duration: 1, ease: 'linear', repeat: Infinity }}
+          transition={{ duration: 1, ease: "linear", repeat: Infinity }}
           className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full"
         />
       </div>
@@ -140,68 +143,68 @@ const Dashboard = () => {
 
   const recommendedCareers = [
     {
-      title: 'AI & Machine Learning Engineer',
-      skills: ['Python', 'TensorFlow', 'PyTorch', 'NLP'],
+      title: "AI & Machine Learning Engineer",
+      skills: ["Python", "TensorFlow", "PyTorch", "NLP"],
       icon: <BrainCircuit className="w-8 h-8 text-blue-600" />,
       details: {
         description:
-          'Specializes in developing algorithms and models that enable machines to learn from data, make predictions, and automate tasks. This role is at the forefront of technological innovation.',
+          "Specializes in developing algorithms and models that enable machines to learn from data, make predictions, and automate tasks. This role is at the forefront of technological innovation.",
         responsibilities: [
-          'Design and build machine learning systems.',
-          'Run machine learning tests and experiments.',
-          'Implement appropriate ML algorithms.',
-          'Develop ML applications according to requirements.',
+          "Design and build machine learning systems.",
+          "Run machine learning tests and experiments.",
+          "Implement appropriate ML algorithms.",
+          "Develop ML applications according to requirements.",
         ],
         roadmap: [
-          'Master Python and key libraries (NumPy, Pandas).',
-          'Learn fundamental ML concepts (supervised, unsupervised learning).',
-          'Study deep learning frameworks (TensorFlow, PyTorch).',
-          'Gain experience with NLP and computer vision.',
-          'Build a portfolio of projects.',
+          "Master Python and key libraries (NumPy, Pandas).",
+          "Learn fundamental ML concepts (supervised, unsupervised learning).",
+          "Study deep learning frameworks (TensorFlow, PyTorch).",
+          "Gain experience with NLP and computer vision.",
+          "Build a portfolio of projects.",
         ],
       },
     },
     {
-      title: 'Cloud Solutions Architect',
-      skills: ['AWS', 'Azure', 'GCP', 'Kubernetes'],
+      title: "Cloud Solutions Architect",
+      skills: ["AWS", "Azure", "GCP", "Kubernetes"],
       icon: <Briefcase className="w-8 h-8 text-green-600" />,
       details: {
         description:
-          'Designs and manages an organization\'s cloud computing architecture. They work with stakeholders to ensure the cloud infrastructure meets the business\'s needs for security, scalability, and performance.',
+          "Designs and manages an organization's cloud computing architecture. They work with stakeholders to ensure the cloud infrastructure meets the business's needs for security, scalability, and performance.",
         responsibilities: [
-          'Develop cloud adoption plans.',
-          'Evaluate and select cloud technologies.',
-          'Oversee cloud migration efforts.',
-          'Manage cloud infrastructure and security.',
+          "Develop cloud adoption plans.",
+          "Evaluate and select cloud technologies.",
+          "Oversee cloud migration efforts.",
+          "Manage cloud infrastructure and security.",
         ],
         roadmap: [
-          'Understand core cloud concepts (IaaS, PaaS, SaaS).',
-          'Get certified in a major cloud provider (AWS, Azure, or GCP).',
-          'Learn containerization with Docker and Kubernetes.',
-          'Gain experience with networking, security, and databases.',
-          'Develop a strong understanding of cost management.',
+          "Understand core cloud concepts (IaaS, PaaS, SaaS).",
+          "Get certified in a major cloud provider (AWS, Azure, or GCP).",
+          "Learn containerization with Docker and Kubernetes.",
+          "Gain experience with networking, security, and databases.",
+          "Develop a strong understanding of cost management.",
         ],
       },
     },
     {
-      title: 'Data Scientist',
-      skills: ['R', 'Python', 'SQL', 'Statistics'],
+      title: "Data Scientist",
+      skills: ["R", "Python", "SQL", "Statistics"],
       icon: <TrendingUp className="w-8 h-8 text-yellow-600" />,
       details: {
         description:
-          'Analyzes and interprets complex data to help organizations make informed decisions. They combine statistics, programming, and business knowledge to uncover insights and solve challenging problems.',
+          "Analyzes and interprets complex data to help organizations make informed decisions. They combine statistics, programming, and business knowledge to uncover insights and solve challenging problems.",
         responsibilities: [
-          'Clean and preprocess raw data.',
-          'Develop predictive models and machine learning algorithms.',
-          'Communicate findings to technical and non-technical teams.',
-          'Create data visualizations and dashboards.',
+          "Clean and preprocess raw data.",
+          "Develop predictive models and machine learning algorithms.",
+          "Communicate findings to technical and non-technical teams.",
+          "Create data visualizations and dashboards.",
         ],
         roadmap: [
-          'Build a strong foundation in statistics and linear algebra.',
-          'Learn a programming language like Python or R.',
-          'Master SQL for database querying.',
-          'Study data visualization tools (Tableau, Power BI).',
-          'Practice with real-world datasets and Kaggle competitions.',
+          "Build a strong foundation in statistics and linear algebra.",
+          "Learn a programming language like Python or R.",
+          "Master SQL for database querying.",
+          "Study data visualization tools (Tableau, Power BI).",
+          "Practice with real-world datasets and Kaggle competitions.",
         ],
       },
     },
@@ -212,31 +215,31 @@ const Dashboard = () => {
       {/* Navbar */}
       <header className="flex items-center justify-between px-6 md:px-12 py-4 bg-white shadow-md border-b border-slate-200 sticky top-0 z-50">
         <div className="flex items-center gap-2">
-          <img src="/logo.gif" alt="" className='h-15 w-15'/>
+          <img src="/logo.gif" alt="" className="h-15 w-15" />
           <span className="text-3xl font-bold text-indigo-700">SkillBite</span>
         </div>
 
         <nav className="hidden sm:flex gap-6 text-indigo-700 font-medium">
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate("/dashboard")}
             className="hover:text-indigo-500 transition duration-200"
           >
             Home
           </button>
           <button
-            onClick={() => navigate('/about')}
+            onClick={() => navigate("/about")}
             className="hover:text-indigo-500 transition duration-200"
           >
             About
           </button>
           <button
-            onClick={() => navigate('/guide')}
+            onClick={() => navigate("/guide")}
             className="hover:text-indigo-500 transition duration-200"
           >
             AI Guide
           </button>
           <button
-            onClick={() => navigate('/courses')}
+            onClick={() => navigate("/courses")}
             className="hover:text-indigo-500 transition duration-200"
           >
             Courses
@@ -263,10 +266,10 @@ const Dashboard = () => {
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <motion.div
-          initial={{ opacity: 0, x: '100%' }}
+          initial={{ opacity: 0, x: "100%" }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: '100%' }}
-          transition={{ type: 'tween', duration: 0.3 }}
+          exit={{ opacity: 0, x: "100%" }}
+          transition={{ type: "tween", duration: 0.3 }}
           className="fixed inset-0 bg-white/95 backdrop-blur-lg z-40 flex flex-col items-center justify-center space-y-8 sm:hidden"
         >
           <a
@@ -350,22 +353,23 @@ const Dashboard = () => {
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between">
               <div className="text-center md:text-left mb-6 md:mb-0">
                 <h2 className="text-4xl md:text-5xl font-extrabold leading-tight mb-3">
-                  Hello, {displayName}!
+                  Hello, {displayName}
                 </h2>
                 <p className="text-lg md:text-xl opacity-90">
                   Your journey to skill mastery begins here.
                 </p>
                 {/* User Progress Bar */}
-                <div className="mt-6 w-full md:w-96 bg-white/20 rounded-full h-3">
-                  <div
-                    className="bg-green-400 h-full rounded-full transition-all duration-500"
-                    style={{ width: `${userProgress.progressPercentage}%` }}
-                  ></div>
+                <div className="mt-6">
+                  <p className="text-lg md:text-xl font-semibold opacity-90 mb-4">
+                    Ready to learn? Jump back into your course.
+                  </p>
+                  <Button
+                    onClick={() => navigate("/courses")}
+                    className="bg-green-400 text-indigo-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-green-300 transition-colors flex items-center"
+                  >
+                    <Zap size={20} className="mr-2" /> Start Learning
+                  </Button>
                 </div>
-                <p className="mt-2 text-sm opacity-80">
-                  {userProgress.completedBites} of {userProgress.totalBites}
-                   courses completed
-                </p>
               </div>
               <div className="flex-shrink-0">
                 <img
@@ -386,7 +390,7 @@ const Dashboard = () => {
               whileHover="hover"
               viewport={{ once: true, amount: 0.3 }}
               className="bg-white border border-indigo-200 rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
-              onClick={() => navigate('/guide')}
+              onClick={() => navigate("/guide")}
             >
               <div className="flex items-center gap-4 mb-4">
                 <div className="bg-indigo-100 p-3 rounded-full">
@@ -398,8 +402,8 @@ const Dashboard = () => {
               </div>
               <p className="text-slate-600 text-base mb-4">
                 Get personalized career paths by entering your current skills
-                and future goals. Our AI Career Guide will generate a role guide with
-                learning plans.
+                and future goals. Our AI Career Guide will generate a role guide
+                with learning plans.
               </p>
               <Button className="bg-indigo-600 text-white w-full py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
                 Get Guidance <ChevronRight className="ml-2 w-5 h-5" />
@@ -413,7 +417,7 @@ const Dashboard = () => {
               whileHover="hover"
               viewport={{ once: true, amount: 0.3 }}
               className="bg-white border border-pink-200 rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer"
-              onClick={() => navigate('/courses')}
+              onClick={() => navigate("/courses")}
             >
               <div className="flex items-center gap-4 mb-4">
                 <div className="bg-pink-100 p-3 rounded-full">
@@ -496,7 +500,7 @@ const Dashboard = () => {
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   whileHover={{
                     translateY: -5,
-                    boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.08)',
+                    boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.08)",
                   }}
                 >
                   <div className="flex items-center mb-3">
@@ -533,10 +537,10 @@ const Dashboard = () => {
                 className="bg-indigo-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-indigo-700 transition duration-300 font-semibold text-lg"
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: '0px 8px 20px rgba(0, 0, 0, 0.2)',
+                  boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)",
                 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/guide')}
+                onClick={() => navigate("/guide")}
               >
                 Get Your Personalized Career Path
               </motion.button>
@@ -619,12 +623,14 @@ const Dashboard = () => {
                     Key Responsibilities
                   </h4>
                   <ul className="list-disc list-inside space-y-2">
-                    {selectedCareer.details.responsibilities.map((item, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="w-2 h-2 mt-2 mr-2 bg-indigo-500 rounded-full flex-shrink-0"></span>
-                        {item}
-                      </li>
-                    ))}
+                    {selectedCareer.details.responsibilities.map(
+                      (item, index) => (
+                        <li key={index} className="flex items-start">
+                          <span className="w-2 h-2 mt-2 mr-2 bg-indigo-500 rounded-full flex-shrink-0"></span>
+                          {item}
+                        </li>
+                      )
+                    )}
                   </ul>
                 </div>
 
@@ -635,7 +641,9 @@ const Dashboard = () => {
                   <ol className="list-decimal list-inside space-y-2">
                     {selectedCareer.details.roadmap.map((item, index) => (
                       <li key={index} className="flex items-start">
-                        <span className="mr-2 font-bold text-indigo-500">{index + 1}.</span>
+                        <span className="mr-2 font-bold text-indigo-500">
+                          {index + 1}.
+                        </span>
                         {item}
                       </li>
                     ))}
@@ -644,7 +652,10 @@ const Dashboard = () => {
               </div>
 
               <div className="mt-8 flex justify-end">
-                <Button onClick={handleCloseModal} className="bg-indigo-600 text-white hover:bg-indigo-700 transition">
+                <Button
+                  onClick={handleCloseModal}
+                  className="bg-indigo-600 text-white hover:bg-indigo-700 transition"
+                >
                   Close
                 </Button>
               </div>

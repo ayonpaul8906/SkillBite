@@ -48,7 +48,7 @@ const About = ({ handleNavigate }) => {
       name: 'Ayon Paul',
       title: 'Frontend Developer',
     //   bio: 'Jane is a visionary leader with over a decade of experience in EdTech. She is passionate about creating accessible and engaging learning experiences for everyone.',
-      image: 'https://placehold.co/400x400/A78BFA/ffffff?text=Jane',
+      image: 'https://placehold.co/400x400/A78BFA/ffffff?text=Ayon',
       socials: {
         linkedin: 'https://www.linkedin.com/in/ayon2407s/',
         github: 'https://twitter.com/',
@@ -58,7 +58,7 @@ const About = ({ handleNavigate }) => {
       name: 'Arnab Ghosh',
       title: 'Backend Developer',
     //   bio: 'John is an AI and machine learning expert, dedicated to using technology to personalize education. He leads our technical team in developing cutting-edge learning tools.',
-      image: 'https://placehold.co/400x400/A78BFA/ffffff?text=John',
+      image: 'https://placehold.co/400x400/A78BFA/ffffff?text=Arnab',
       socials: {
         linkedin: 'https://linkedin.com/',
         twitter: 'https://twitter.com/',
@@ -68,7 +68,7 @@ const About = ({ handleNavigate }) => {
       name: 'Alolika Gupta',
       title: 'Cloud Engineer',
     //   bio: 'Emily is a master storyteller and curriculum developer. She ensures that every bite-sized lesson is both informative and enjoyable, making learning stick.',
-      image: 'https://placehold.co/400x400/A78BFA/ffffff?text=Emily',
+      image: 'https://placehold.co/400x400/A78BFA/ffffff?text=Alolika',
       socials: {
         linkedin: 'https://linkedin.com/',
         twitter: 'https://twitter.com/',
@@ -76,9 +76,9 @@ const About = ({ handleNavigate }) => {
     },
      {
       name: 'Anshu Kashyap',
-      title: 'Cloud Engineer',
+      title: 'UI/UX Designer',
     //   bio: 'Emily is a master storyteller and curriculum developer. She ensures that every bite-sized lesson is both informative and enjoyable, making learning stick.',
-      image: 'https://placehold.co/400x400/A78BFA/ffffff?text=Emily',
+      image: 'https://placehold.co/400x400/A78BFA/ffffff?text=Anshu',
       socials: {
         linkedin: 'https://linkedin.com/',
         twitter: 'https://twitter.com/',

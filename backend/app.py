@@ -42,8 +42,23 @@ def recommend():
     if not user_id or not skills or not goal:
         return jsonify({"error": "Missing userId, skills, or goal"}), 400
 
-    recommendations_raw = generate_learning_resources(skills, goal)
+    user_ref = db.collection("users").document(user_id)
+    courses_ref = user_ref.collection("courses")
 
+    # Check active courses (not fully completed)
+    active_courses = []
+    courses_docs = courses_ref.stream()
+    for doc in courses_docs:
+        course_data = doc.to_dict()
+        resources = course_data.get("resources", [])
+        if not all(r.get("completed", False) for r in resources):
+            active_courses.append(doc.id)
+
+    if len(active_courses) >= 3:
+        return jsonify({"error": "You can only have 3 active courses. Complete them before generating new ones.", "active_courses": active_courses}), 400
+
+    # Generate new course
+    recommendations_raw = generate_learning_resources(skills, goal)
     try:
         import json
         recommendations = json.loads(recommendations_raw)
@@ -52,30 +67,27 @@ def recommend():
     except Exception as e:
         return jsonify({"error": "Failed to parse Groq response", "raw": recommendations_raw, "exception": str(e)}), 500
 
+    # Use course name as document ID (sanitize for Firestore)
+    course_name = recommendations.get("course_name") or goal or "untitled_course"
+    course_id = course_name.replace(" ", "_").replace("/", "_").lower()
+
     try:
-        # user_ref = db.collection("users").document(user_id)
-        user_ref = db.collection("users").document(user_id)
-        resource_ids_ref = user_ref.collection("resource_ids")
-
-        for resource in recommendations.get("resources", []):
-            # Generate a unique ID for the resource (e.g., hash of title+goal)
-            import hashlib
-            resource_id = hashlib.md5((resource["title"] + goal).encode()).hexdigest()
-            resource_data = {
-                "resource_data": resource,
-                "goal": goal,
-                "completed": resource.get("completed", False),
-                "timestamp": firestore.SERVER_TIMESTAMP,
-            }
-            resource_ids_ref.document(resource_id).set(resource_data, merge=True)
-
-        user_ref.set({
-            "skills": skills,
+        # Store new course under courses subcollection
+        courses_ref.document(course_id).set({
+            "course_name": course_name,
             "goal": goal,
-            "recommendations": recommendations,
+            "skills": skills,
+            "resources": recommendations.get("resources", []),
+            "created_at": firestore.SERVER_TIMESTAMP,
+            "completed": False
         }, merge=True)
 
-        print("✅ Firestore write successful for user:", user_id)
+        # Optionally update user profile with last generated course
+        user_ref.set({
+            "last_generated_course": course_name,
+        }, merge=True)
+
+        print("✅ Firestore write successful for user:", user_id, "course:", course_name)
     except Exception as e:
         print("❌ Firestore write failed:", e)
         return jsonify({"error": "Firestore write failed", "exception": str(e)}), 500
