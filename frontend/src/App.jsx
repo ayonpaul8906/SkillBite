@@ -15,7 +15,6 @@ function App() {
   return (
     <>
      <AuthProvider>
-      {/* <Router> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -25,7 +24,6 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/courses" element={<Course />} />
       </Routes>
-    {/* </Router> */}
     </AuthProvider>
     </>
   )
