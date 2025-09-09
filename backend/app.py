@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
+import json
 
 import firebase_admin
 from firebase_admin import credentials, firestore, db
@@ -14,8 +15,16 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-cred_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
-cred = credentials.Certificate(cred_path)
+cred_path_or_json = os.getenv("FIREBASE_CREDENTIALS_PATH")
+
+if cred_path_or_json and cred_path_or_json.strip().startswith("{"):
+    # If it looks like JSON → parse it
+    cred_dict = json.loads(cred_path_or_json)
+    cred = credentials.Certificate(cred_dict)
+else:
+    # Otherwise, assume it's a file path
+    cred = credentials.Certificate(cred_path_or_json)
+
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()
