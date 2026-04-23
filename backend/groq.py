@@ -257,7 +257,7 @@ Format the output as a **JSON object** like this:
         }],
         "generationConfig": {
             "temperature": 0.7,
-            "maxOutputTokens": 2048,
+            "maxOutputTokens": 4096,
             "response_mime_type": "application/json"
         }
     }
