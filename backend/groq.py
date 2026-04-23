@@ -12,25 +12,25 @@ YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY")
 
 # Helper to extract JSON from Gemini response
 def extract_json_from_response(text):
-    """Extract JSON from Gemini response, handling multiple formats"""
+    """Robust JSON extractor for Gemini responses"""
     if not text or not text.strip():
         return None
-    
-    # Try to find JSON block first
-    json_match = re.search(r"```json\s*(.*?)```", text, re.DOTALL | re.IGNORECASE)
-    if json_match:
-        return json_match.group(1).strip()
-    
-    # Try to find content between curly braces
-    brace_match = re.search(r"(\{.*\})", text, re.DOTALL)
-    if brace_match:
-        return brace_match.group(1).strip()
-    
-    # If the entire text looks like JSON, return it
+
+    # 🔥 Remove markdown wrappers (handles ALL Gemini formats)
+    text = re.sub(r"```json", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"```", "", text)
+
     text = text.strip()
-    if text.startswith('{') and text.endswith('}'):
+
+    # ✅ Case 1: Already clean JSON
+    if text.startswith("{") and text.endswith("}"):
         return text
-    
+
+    # ✅ Case 2: Extract JSON object from messy response
+    match = re.search(r"\{.*\}", text, re.DOTALL)
+    if match:
+        return match.group().strip()
+
     return None
 
 def search_youtube(query, max_results=3):
@@ -257,7 +257,8 @@ Format the output as a **JSON object** like this:
         }],
         "generationConfig": {
             "temperature": 0.7,
-            "maxOutputTokens": 2048
+            "maxOutputTokens": 2048,
+            "response_mime_type": "application/json"
         }
     }
     
